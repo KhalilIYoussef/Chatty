@@ -1,5 +1,10 @@
 
-package khaliliyoussef.chatty;
+package khaliliyoussef.chatty.model;
+
+/***
+ * in here we define the form of the message and the function to use it to create a list of it
+ *
+ */
 
 public class FriendlyMessage {
 

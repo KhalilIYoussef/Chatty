@@ -1,8 +1,9 @@
 
-package khaliliyoussef.chatty;
+package khaliliyoussef.chatty.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -13,11 +14,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import khaliliyoussef.chatty.R;
+import khaliliyoussef.chatty.adapter.MessageAdapter;
+import khaliliyoussef.chatty.model.FriendlyMessage;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,13 +31,13 @@ public class MainActivity extends AppCompatActivity {
     public static final String ANONYMOUS = "anonymous";
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
 
-    private ListView mMessageListView;
+    private@BindView(R.id.messageListView) RecyclerView mMessageRecyclerView;
+    private @BindView(R.id.progressBar) ProgressBar mProgressBar;
+    private@BindView(R.id.photoPickerButton) ImageButton mPhotoPickerButton;
+    private @BindView(R.id.messageEditText) EditText mMessageEditText;
+    private @BindView(R.id.sendButton) Button mSendButton;
     private MessageAdapter mMessageAdapter;
-    private ProgressBar mProgressBar;
-    private ImageButton mPhotoPickerButton;
-    private EditText mMessageEditText;
-    private Button mSendButton;
-
+    private List<FriendlyMessage> friendlyMessages;
     private String mUsername;
 
     @Override
@@ -42,17 +47,12 @@ public class MainActivity extends AppCompatActivity {
 
         mUsername = ANONYMOUS;
 
-        // Initialize references to views
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mMessageListView = (ListView) findViewById(R.id.messageListView);
-        mPhotoPickerButton = (ImageButton) findViewById(R.id.photoPickerButton);
-        mMessageEditText = (EditText) findViewById(R.id.messageEditText);
-        mSendButton = (Button) findViewById(R.id.sendButton);
 
         // Initialize message ListView and its adapter
-        List<FriendlyMessage> friendlyMessages = new ArrayList<>();
-        mMessageAdapter = new MessageAdapter(this, R.layout.item_message, friendlyMessages);
-        mMessageListView.setAdapter(mMessageAdapter);
+         friendlyMessages = new ArrayList<>();
+
+        mMessageAdapter = new MessageAdapter(this,friendlyMessages);
+        mMessageRecyclerView.setAdapter(mMessageAdapter);
 
         // Initialize progress bar
         mProgressBar.setVisibility(ProgressBar.INVISIBLE);
