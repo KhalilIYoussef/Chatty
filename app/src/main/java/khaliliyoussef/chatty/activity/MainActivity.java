@@ -16,10 +16,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import khaliliyoussef.chatty.R;
 import khaliliyoussef.chatty.adapter.MessageAdapter;
 import khaliliyoussef.chatty.model.FriendlyMessage;
@@ -31,24 +35,32 @@ public class MainActivity extends AppCompatActivity {
     public static final String ANONYMOUS = "anonymous";
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
 
-    private@BindView(R.id.messageListView) RecyclerView mMessageRecyclerView;
-    private @BindView(R.id.progressBar) ProgressBar mProgressBar;
-    private@BindView(R.id.photoPickerButton) ImageButton mPhotoPickerButton;
-    private @BindView(R.id.messageEditText) EditText mMessageEditText;
-    private @BindView(R.id.sendButton) Button mSendButton;
+    @BindView(R.id.messageListView) RecyclerView mMessageRecyclerView;
+     @BindView(R.id.progressBar) ProgressBar mProgressBar;
+   @BindView(R.id.photoPickerButton) ImageButton mPhotoPickerButton;
+     @BindView(R.id.messageEditText) EditText mMessageEditText;
+    @BindView(R.id.sendButton) Button mSendButton;
     private MessageAdapter mMessageAdapter;
     private List<FriendlyMessage> friendlyMessages;
     private String mUsername;
+    //referencing the entry point for the database
+    private FirebaseDatabase mFirebaseDatabase;
+    //Message DatabaseReference
+    private DatabaseReference mMessaageDatabaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         mUsername = ANONYMOUS;
+        //get a reference to the root node
+        mFirebaseDatabase =FirebaseDatabase.getInstance();
+        //get preference to a specific part of the database
+        mMessaageDatabaseReference=mFirebaseDatabase.getReference().child("messages");
 
-
-        // Initialize message ListView and its adapter
+        // Initialize message RecyclerView and its adapter
          friendlyMessages = new ArrayList<>();
 
         mMessageAdapter = new MessageAdapter(this,friendlyMessages);
@@ -60,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
         // ImagePickerButton shows an image picker to upload a image for a message
         mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 // TODO: Fire an intent to show an image picker
             }
         });
@@ -94,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
 
                 // Clear input box
                 mMessageEditText.setText("");
+                mMessaageDatabaseReference.push().setValue(mMessageEditText.getText().toString());
+                FriendlyMessage friendlyMessage = new FriendlyMessage(mMessageEditText.getText().toString(), mUsername, null);
             }
         });
     }

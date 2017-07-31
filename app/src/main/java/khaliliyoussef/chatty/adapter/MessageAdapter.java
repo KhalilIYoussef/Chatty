@@ -24,7 +24,7 @@ import khaliliyoussef.chatty.model.FriendlyMessage;
 import khaliliyoussef.chatty.R;
 
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.RecipeViewHolder> {
+public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
 
 
     private Context mContext;
@@ -39,15 +39,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.RecipeVi
     }
 
     @Override
-    public RecipeViewHolder onCreateViewHolder(final ViewGroup parent, int viewType)
+    public MessageViewHolder onCreateViewHolder(final ViewGroup parent, int viewType)
     {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item, parent, false);
 
-        return new RecipeViewHolder(itemView);
+        return new MessageViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final RecipeViewHolder holder, final int position) {
+    public void onBindViewHolder(final MessageViewHolder holder, final int position)
+    {
 
 
         boolean isPhoto = mMessages.get(position).getPhotoUrl() != null;
@@ -70,24 +71,24 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.RecipeVi
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+    {
         if (mMessages == null) {
             return 0;
         }
         return mMessages.size();
     }
 
-    class RecipeViewHolder extends RecyclerView.ViewHolder
+    class MessageViewHolder extends RecyclerView.ViewHolder
     {
 
          @BindView(R.id.photoImageView)ImageView photoImageView;
          @BindView(R.id.messageTextView)TextView messageTextView;
          @BindView(R.id.nameTextView)TextView authorTextView;
 
-        public RecipeViewHolder(final View itemView)
+        public MessageViewHolder(final View itemView)
         {
             super(itemView);
-            //TODO this how it's done inside the RecyclerView
             ButterKnife.bind(this, itemView);
 
         }
