@@ -16,6 +16,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -47,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase mFirebaseDatabase;
     //Message DatabaseReference
     private DatabaseReference mMessaageDatabaseReference;
+    // Child event listener to read from the database
+    private ChildEventListener mChildEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,13 +109,51 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // TODO: Send messages on click
+                FriendlyMessage friendlyMessage = new FriendlyMessage(mMessageEditText.getText().toString(), mUsername, null);
+
+                //notice setValue only takes a single object that's why we made a class for messages
+                mMessaageDatabaseReference.push().setValue(friendlyMessage);
+
 
                 // Clear input box
                 mMessageEditText.setText("");
-                mMessaageDatabaseReference.push().setValue(mMessageEditText.getText().toString());
-                FriendlyMessage friendlyMessage = new FriendlyMessage(mMessageEditText.getText().toString(), mUsername, null);
+
             }
         });
+        mChildEventListener =new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                //when we add a child to our database
+                //when a new message is inserted & when the listener is attached (called twice)
+                FriendlyMessage mMessage=dataSnapshot.getValue(FriendlyMessage.class);
+                friendlyMessages.add(mMessage);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                //when we change the value of a database
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                //when remove a child
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                //when moving a child from one position to another
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //error happened or don't have permission to read the data
+
+            }
+        };
+        //please notice not to attach a listener to the root directory of the database
+        //listen to the massages location and here is what will happen
+        mMessaageDatabaseReference.addChildEventListener(mChildEventListener);
     }
 
     @Override
