@@ -94,6 +94,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         }
 
         }
+    public void clear() {
+        int size = this.mMessages.size();
+        if (size > 0) {
+            for (int i = 0; i < size; i++) {
+                this.mMessages.remove(0);
+            }
 
+            this.notifyItemRangeRemoved(0, size);
+        }
+    }
     }
 
