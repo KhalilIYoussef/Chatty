@@ -269,14 +269,17 @@ public class MainActivity extends AppCompatActivity {
             Uri selectedImageUri=data.getData();
             StorageReference photoRef=
                     mChatPhotoStorageReference.child(selectedImageUri.getLastPathSegment());
-            //saving the image in the storage database (there is two databases)
-            photoRef.putFile(selectedImageUri).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            //saving the image in the storage database (there is two databases )
+            photoRef.putFile(selectedImageUri).addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>()
+            {
+
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     //the uri for the image that was downloaded
                 Uri downloadUri=taskSnapshot.getDownloadUrl();
                     //push it to the Database
-                    mMessaageDatabaseReference.push().setValue(new ChattyMessage(null,null,downloadUri.toString()));
+                  ChattyMessage chattyMessage= new ChattyMessage(null,null,downloadUri.toString());
+                    mMessaageDatabaseReference.push().setValue(chattyMessage);
                 }
             });
 
