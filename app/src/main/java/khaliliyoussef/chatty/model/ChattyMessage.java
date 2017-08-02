@@ -6,16 +6,16 @@ package khaliliyoussef.chatty.model;
  *
  */
 
-public class FriendlyMessage {
+public class ChattyMessage {
 
     private String text;
     private String name;
     private String photoUrl;
 
-    public FriendlyMessage() {
+    public ChattyMessage() {
     }
 
-    public FriendlyMessage(String text, String name, String photoUrl) {
+    public ChattyMessage(String text, String name, String photoUrl) {
         this.text = text;
         this.name = name;
         this.photoUrl = photoUrl;

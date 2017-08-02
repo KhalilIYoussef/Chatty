@@ -20,7 +20,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import khaliliyoussef.chatty.model.FriendlyMessage;
+import khaliliyoussef.chatty.model.ChattyMessage;
 import khaliliyoussef.chatty.R;
 
 
@@ -28,9 +28,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
 
     private Context mContext;
-    private List<FriendlyMessage> mMessages;
+    private List<ChattyMessage> mMessages;
 
-    public MessageAdapter(final Context context, List<FriendlyMessage> messages )
+    public MessageAdapter(final Context context, List<ChattyMessage> messages )
     {
         //get the context from the activity
         this.mContext = context;
